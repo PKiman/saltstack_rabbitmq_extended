@@ -1,5 +1,5 @@
 # saltstack_rabbitmq_extended
-Missing Saltstack state modules for RabbitMQ
+# The Missing Saltstack state modules for RabbitMQ
 
 This project extends saltstack state modules to configure the exchanges, queues and bindings in RabbitMQ
 
