@@ -8,6 +8,7 @@ https://docs.saltstack.com/en/latest/ref/states/writing.html#states-are-easy-to-
 
 How to use the states?
 
+```yaml
 # Manage Exchanges
 # Creates the exchange "my-new-exchange"
 add_my-new-exchange:
@@ -79,3 +80,4 @@ remove_my-new-binding:
     - vhost: test_vhost
     - user: user
     - passwd: 'password'
+```
