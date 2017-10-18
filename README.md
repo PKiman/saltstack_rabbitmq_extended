@@ -6,6 +6,10 @@ This project extends saltstack state modules to configure the exchanges, queues 
 Just copy the 2 folders _states and _modules into your file_roots as documented here:
 https://docs.saltstack.com/en/latest/ref/states/writing.html#states-are-easy-to-write
 
+Known issues:
+In case of extending (add additional arguments) existing exchanges, queues and bindings those must be removed and created again.  
+
+
 How to use the state modules?
 
 ```yaml
