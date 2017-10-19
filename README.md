@@ -26,6 +26,17 @@ rabbitmq-server-service:
     - require:
       - pkg: rabbitmq-server.noarch
 
+# make sure the plugin rabbitmq_management is installed
+# sudo rabbitmq-plugins enable rabbitmq_management
+rabbitmq_management:
+  rabbitmq_plugin.enabled:
+    - name: rabbitmq_management
+    - runas: root
+    - require:
+      - pkg: rabbitmq-server.noarch
+    - watch_in:
+      - service: rabbitmq-server-service
+
 # sudo curl -k -L http://localhost:15672/cli/rabbitmqadmin -o /usr/sbin/rabbitmqadmin && sudo chmod 755 /usr/sbin/rabbitmqadmin
 chmod_rabbitmqadmin:
   file.managed:
@@ -38,6 +49,7 @@ chmod_rabbitmqadmin:
     - unless: 'test -f /usr/sbin/rabbitmqadmin'
     - require:
       - service: rabbitmq-server-service
+      - rabbitmq_plugin: rabbitmq_management
 
 # Add a vhost like 
 # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.rabbitmq_vhost.html#salt.states.rabbitmq_vhost.present
