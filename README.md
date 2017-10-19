@@ -1,7 +1,7 @@
 # saltstack_rabbitmq_extended
 # The Missing Saltstack state modules for RabbitMQ
 
-This project extends saltstack state modules to configure the exchanges, queues and bindings in RabbitMQ
+This project extends saltstack state modules to configure the exchanges, queues and bindings in RabbitMQ by wrapping the cli rabbitmqadmin.
 
 Just copy the 2 folders _states and _modules into your file_roots as documented here:
 https://docs.saltstack.com/en/latest/ref/states/writing.html#states-are-easy-to-write
