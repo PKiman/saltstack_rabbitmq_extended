@@ -26,6 +26,19 @@ rabbitmq-server-service:
     - require:
       - pkg: rabbitmq-server.noarch
 
+# sudo curl -k -L http://localhost:15672/cli/rabbitmqadmin -o /usr/sbin/rabbitmqadmin && sudo chmod 755 /usr/sbin/rabbitmqadmin
+chmod_rabbitmqadmin:
+  file.managed:
+    - name: /usr/sbin/rabbitmqadmin
+    - user: root
+    - group: root
+    - mode: 755
+  cmd.run:
+    - name : 'curl -k -L http://localhost:15672/cli/rabbitmqadmin -o /usr/sbin/rabbitmqadmin'
+    - unless: 'test -f /usr/sbin/rabbitmqadmin'
+    - require:
+      - service: rabbitmq-server-service
+
 # Add a vhost like 
 # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.rabbitmq_vhost.html#salt.states.rabbitmq_vhost.present
 add_test_vhost:
