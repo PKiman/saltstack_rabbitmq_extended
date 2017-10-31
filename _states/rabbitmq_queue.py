@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Manage RabbitMQ Queue
 =============================
 
@@ -20,7 +20,7 @@ Example:
           - "x-message-ttl": 86400000
           - "x-expires":86400000
           - "x-dead-letter-exchange":"deadletters.fanout"
-'''
+"""
 
 # Import python libs
 from __future__ import absolute_import
@@ -33,9 +33,9 @@ log = logging.getLogger(__name__)
 
 
 def __virtual__():
-    '''
+    """
     Only load if RabbitMQ is installed.
-    '''
+    """
     return salt.utils.which('rabbitmqadmin') is not None
 
 
@@ -47,7 +47,7 @@ def present(name,
             port=15672,
             vhost='/',
             arguments=()):
-    '''
+    """
     Ensure the RabbitMQ Queue exists.
 
     name
@@ -91,7 +91,7 @@ def present(name,
         - x-dead-letter-routing-key: string
         - x-max-priority: number
 
-    '''
+    """
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 
     queue_exists = __salt__['rabbitmq_extended.queue_exists'](name, 'localhost', port, user, passwd, vhost)
@@ -125,7 +125,7 @@ def absent(name,
            passwd='guest',
            port=15672,
            vhost='/'):
-    '''
+    """
     Ensure the RabbitMQ Queue is absent
 
     name
@@ -145,7 +145,7 @@ def absent(name,
         Initial vhost to which the Queue is linked to
         Defaults to '/'
 
-    '''
+    """
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 
     queue_exists = __salt__['rabbitmq_extended.queue_exists'](name, 'localhost', port, user, passwd, vhost)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Manage RabbitMQ Exchange
 =============================
 
@@ -21,7 +21,7 @@ Example:
         - arguments:
           - "x-message-ttl": 86400000
           - "x-expires":86400000
-'''
+"""
 
 # Import python libs
 from __future__ import absolute_import
@@ -34,9 +34,9 @@ log = logging.getLogger(__name__)
 
 
 def __virtual__():
-    '''
+    """
     Only load if RabbitMQ is installed.
-    '''
+    """
     return salt.utils.which('rabbitmqadmin') is not None
 
 
@@ -50,7 +50,7 @@ def present(name,
             port=15672,
             vhost='/',
             arguments=()):
-    '''
+    """
     Ensure the RabbitMQ Exchange exists.
 
     name
@@ -90,7 +90,7 @@ def present(name,
     arguments
         A list of argument keys
 
-    '''
+    """
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 
     exchange_exists = __salt__['rabbitmq_extended.exchange_exists'](name, 'localhost', port, user, passwd, vhost)
@@ -124,7 +124,7 @@ def absent(name,
            passwd='guest',
            port=15672,
            vhost='/'):
-    '''
+    """
     Ensure the RabbitMQ Exchange is absent
 
     name
@@ -144,7 +144,7 @@ def absent(name,
         Initial vhost to which the exchange is linked to
         Defaults to '/'
 
-    '''
+    """
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 
     exchange_exists = __salt__['rabbitmq_extended.exchange_exists'](name, 'localhost', port, user, passwd, vhost)

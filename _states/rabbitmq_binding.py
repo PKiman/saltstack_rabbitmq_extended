@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Manage RabbitMQ Binding
 =============================
 
@@ -17,7 +17,7 @@ Example:
         - passwd: guest
         - port: 15672
         - vhost: '/'
-'''
+"""
 
 # Import python libs
 from __future__ import absolute_import
@@ -30,9 +30,9 @@ log = logging.getLogger(__name__)
 
 
 def __virtual__():
-    '''
+    """
     Only load if RabbitMQ is installed.
-    '''
+    """
     return salt.utils.which('rabbitmqadmin') is not None
 
 
@@ -45,7 +45,7 @@ def present(name,
             port=15672,
             vhost='/',
             arguments=()):
-    '''
+    """
     Ensure the RabbitMQ Binding exists.
 
     name
@@ -78,7 +78,7 @@ def present(name,
     arguments
         A list of argument keys
 
-    '''
+    """
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 
     binding_exists = __salt__['rabbitmq_extended.binding_exists'](name, destination, destination_type,
@@ -112,7 +112,7 @@ def present(name,
 def absent(name,
            destination, routing_key, destination_type,
            user='guest', passwd='guest', port=15672, vhost='/'):
-    '''
+    """
     Ensure the RabbitMQ Binding is absent
 
     name
@@ -141,7 +141,7 @@ def absent(name,
         Initial vhost to which the Binding is linked to
         Defaults to '/'
 
-    '''
+    """
     ret = {'name': name, 'result': True, 'comment': '', 'changes': {}}
 
     properties_key = __salt__['rabbitmq_extended.binding_exists_with_props'](name, destination, destination_type, routing_key,

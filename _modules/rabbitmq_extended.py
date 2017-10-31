@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Extended Module to provide RabbitMQ compatibility to Salt.
 Todo: A lot, need to add cluster support, logging, and minion configuration
 data.
-'''
+"""
 from __future__ import absolute_import
 
 # Import python libs
 import json
-import re
 import logging
-import random
-import string
 
 # Import salt libs
 import salt.utils
@@ -25,9 +22,9 @@ log = logging.getLogger(__name__)
 
 
 def __virtual__():
-    '''
+    """
     Verify RabbitMQ is installed.
-    '''
+    """
     rabbitmqctl = salt.utils.which('rabbitmqctl') is not None
     rabbitmqadmin = salt.utils.which('rabbitmqadmin') is not None
     return rabbitmqctl and rabbitmqadmin
@@ -49,11 +46,11 @@ def _format_response(response, msg):
 
 
 def _safe_output(line):
-    '''
+    """
     Looks for rabbitmqctl warning, or general formatting, strings that aren't
     intended to be parsed as output.
     Returns a boolean whether the line can be parsed as rabbitmqctl output.
-    '''
+    """
     return not any([
         line.startswith('Listing') and line.endswith('...'),
         '...done' in line,
@@ -62,21 +59,21 @@ def _safe_output(line):
 
 
 def _strip_listing_to_done(output_list):
-    '''
+    """
     Conditionally remove non-relevant first and last line,
     "Listing ..." - "...done".
     outputlist: rabbitmq command output split by newline
     return value: list, conditionally modified, may be empty.
-    '''
+    """
     return [line for line in output_list if _safe_output(line)]
 
 
 def _output_to_dict(cmdoutput, values_mapper=None):
-    '''
+    """
     Convert rabbitmqctl output to a dict of data
     cmdoutput: string output of rabbitmqctl commands
     values_mapper: function object to process the values part of each line
-    '''
+    """
     ret = {}
     if values_mapper is None:
         values_mapper = lambda string: string.split('\t')
@@ -103,7 +100,7 @@ def _output_to_dict(cmdoutput, values_mapper=None):
 
 def exchange_exists(name, host='localhost',port=15672,
                     user='guest', passwd='guest', vhost='/', runas=None):
-    '''
+    """
     Return whether the exchange exists based on rabbitmqadmin list exchanges.
 
     CLI Example:
@@ -111,7 +108,7 @@ def exchange_exists(name, host='localhost',port=15672,
     .. code-block:: bash
 
         salt '*' rabbitmq_extended.rabbit_exchange rabbit_host rabbit_port rabbit_user rabbit_password rabbit_vhost
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
@@ -126,7 +123,7 @@ def exchange_exists(name, host='localhost',port=15672,
 
 def queue_exists(name, host='localhost',port=15672,
                  user='guest', passwd='guest', vhost='/', runas=None):
-    '''
+    """
     Return whether the exchange exists based on rabbitmqadmin list queues.
 
     CLI Example:
@@ -134,7 +131,7 @@ def queue_exists(name, host='localhost',port=15672,
     .. code-block:: bash
 
         salt '*' rabbitmq_extended.queue_exists rabbit_host rabbit_port rabbit_user rabbit_password rabbit_vhost
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
@@ -149,7 +146,7 @@ def queue_exists(name, host='localhost',port=15672,
 
 def binding_exists(name, destination, destination_type, routing_key, host='localhost',port=15672,
                    user='guest', passwd='guest', vhost='/', runas=None):
-    '''
+    """
     Return whether the binding exists based on rabbitmqadmin list bindings.
 
     CLI Example:
@@ -158,7 +155,7 @@ def binding_exists(name, destination, destination_type, routing_key, host='local
 
         salt '*' rabbitmq_extended.binding_exists rabbit_destination rabbit_destination_type rabbit_routing_key
                  abbit_host rabbit_port rabbit_user rabbit_password rabbit_vhost
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
@@ -176,7 +173,7 @@ def binding_exists(name, destination, destination_type, routing_key, host='local
 
 def binding_exists_with_props(name, destination, destination_type, routing_key, host='localhost',port=15672,
                               user='guest', passwd='guest', vhost='/', runas=None):
-    '''
+    """
     Return whether the binding exists based on rabbitmqadmin list bindings returns with properties_key.
 
     CLI Example:
@@ -185,7 +182,7 @@ def binding_exists_with_props(name, destination, destination_type, routing_key, 
 
         salt '*' rabbitmq_extended.binding_exists_with_props rabbit_destination rabbit_destination_type rabbit_routing_key
                  abbit_host rabbit_port rabbit_user rabbit_password rabbit_vhost
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
@@ -203,7 +200,7 @@ def binding_exists_with_props(name, destination, destination_type, routing_key, 
 
 def add_exchange(exchange, host='localhost', port=15672, user='guest', passwd='guest', vhost='/',
                  type='fanout', durable=False, internal=False, auto_delete=False, arguments=(), runas=None):
-    '''
+    """
     Adds an exchange via rabbitmqadmin add_exchange.
 
     CLI Example:
@@ -212,7 +209,7 @@ def add_exchange(exchange, host='localhost', port=15672, user='guest', passwd='g
 
         salt '*' rabbitmq_extended.add_exchange '<exchange_name>' '<host>' '<port>' '<user>' '<passwd>'
                 '<vhost_name>' '<type>' '<durable>' '<internal>' '<auto_delete>' '<arguments>'
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     args = {}
@@ -232,7 +229,7 @@ def add_exchange(exchange, host='localhost', port=15672, user='guest', passwd='g
 
 def add_queue(queue, host='localhost', port=15672, user='guest', passwd='guest',
               vhost='/', durable=False, auto_delete=False, arguments=(), runas=None):
-    '''
+    """
     Adds a queue via rabbitmqadmin add_queue.
 
     CLI Example:
@@ -241,7 +238,7 @@ def add_queue(queue, host='localhost', port=15672, user='guest', passwd='guest',
 
         salt '*' rabbitmq_extended.add_queue '<queue_name>' '<host>' '<port>' '<user>' '<passwd>'
                 '<vhost_name>' '<durable>' '<auto_delete>' '<arguments>'
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     args = {}
@@ -261,7 +258,7 @@ def add_queue(queue, host='localhost', port=15672, user='guest', passwd='guest',
 def add_binding(binding, destination, destination_type, routing_key,
                 host='localhost', port=15672, user='guest', passwd='guest',
                 vhost='/', arguments=(), runas=None):
-    '''
+    """
     Adds a binding via rabbitmqadmin add_binding.
 
     CLI Example:
@@ -270,7 +267,7 @@ def add_binding(binding, destination, destination_type, routing_key,
 
         salt '*' rabbitmq_extended.add_binding '<binding_name>' '<host>' '<port>' '<user>' '<passwd>'
                 '<vhost_name>' '<durable>' '<auto_delete>' '<arguments>'
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     args = {}
@@ -290,7 +287,7 @@ def add_binding(binding, destination, destination_type, routing_key,
 
 
 def delete_exchange(exchange, host='localhost', port=15672, user='guest', passwd='guest', vhost='/', runas=None):
-    '''
+    """
     Deletes an exchange rabbitmqadmin delete_exchange.
 
     CLI Example:
@@ -298,7 +295,7 @@ def delete_exchange(exchange, host='localhost', port=15672, user='guest', passwd
     .. code-block:: bash
 
         salt '*' rabbitmq_extended.delete_exchange '<exchange_name>' '<host>' '<port>' '<user>' '<passwd>' '<vhost_name>'
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
@@ -311,7 +308,7 @@ def delete_exchange(exchange, host='localhost', port=15672, user='guest', passwd
 
 
 def delete_queue(queue, host='localhost', port=15672, user='guest', passwd='guest', vhost='/', runas=None):
-    '''
+    """
     Deletes a queue rabbitmqadmin delete_queue.
 
     CLI Example:
@@ -319,7 +316,7 @@ def delete_queue(queue, host='localhost', port=15672, user='guest', passwd='gues
     .. code-block:: bash
 
         salt '*' rabbitmq_extended.delete_queue '<queue_name>' '<host>' '<port>' '<user>' '<passwd>' '<vhost_name>'
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
@@ -334,7 +331,7 @@ def delete_queue(queue, host='localhost', port=15672, user='guest', passwd='gues
 def delete_binding(binding, destination, destination_type, properties_key,
                    host='localhost', port=15672, user='guest', passwd='guest',
                    vhost='/', runas=None):
-    '''
+    """
     Deletes a binding rabbitmqadmin delete_binding.
 
     CLI Example:
@@ -344,7 +341,7 @@ def delete_binding(binding, destination, destination_type, properties_key,
         salt '*' rabbitmq_extended.delete_binding '<binding_name>' '<destination>' '<destination_type>'
                                                   '<properties_key>' '<host>' '<port>'
                                                   '<user>' '<passwd>' '<vhost_name>'
-    '''
+    """
     if runas is None:
         runas = salt.utils.get_user()
     res = __salt__['cmd.run'](
